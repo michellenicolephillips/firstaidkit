@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from '../styles/globals.css';
+import '../styles/globals.css';
 
 function NewApplicantForm() {
      const [applicantName, setApplicantName] = useState('');
