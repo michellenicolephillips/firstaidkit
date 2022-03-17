@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import type { Applicant } from './api/lib/applicant'
+import NewApplicantForm from './form'
 
 const Home: NextPage = () => {
   const [applicants, setApplicants] = useState<Applicant[]>([])
@@ -12,7 +13,7 @@ const Home: NextPage = () => {
     (async () => {
       setApplicants(await (await fetch('/api/all')).json() as Applicant[]);
     })();
-  });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -32,6 +33,7 @@ const Home: NextPage = () => {
           </li>
           )}
         </ul>
+        <NewApplicantForm/>
       </main>
     </div>
   )
