@@ -14,3 +14,7 @@ a {
 * {
   box-sizing: border-box;
 }
+.alert{
+color: red;
+font-size: .5em;
+}

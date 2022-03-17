@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import styles from '../styles/globals.css';
 
 function NewApplicantForm() {
      const [applicantName, setApplicantName] = useState('');
      const [applicantNumber, setApplicantNumber] = useState('');
+     const [invalidAlert, setInvalidAlert] = useState('');
 
      const changeName = (event: React.FormEvent<HTMLInputElement>) => {
           setApplicantName(event.currentTarget.value)
@@ -13,27 +15,28 @@ function NewApplicantForm() {
      }
      const validatePhone = (phoneNumber: string) => {
           if (phoneNumber.length != 10) {
-               alert("Client number invalid");
+               setInvalidAlert("Invalid Number");
+               return false;
           } else {
-               alert("Client: " + applicantName + " Number: " + applicantNumber)
+               setInvalidAlert('');
+               return true;
           }
      }
      const handleSubmit = () => {
-          validatePhone(applicantNumber);
-          const path : string = '/api/newUser?name=' + applicantName + '&number=' + applicantNumber;
-          (async () => {
-               await fetch(path);
-          })();
-         
+          if (validatePhone(applicantNumber)) {
+               const path : string = '/api/newUser?name=' + applicantName + '&number=' + applicantNumber;
+               (async () => {
+                    const response = await fetch(path, 
+                    {method: 'POST'});
+                    console.log(response.status);
+                    if (response.status != 200) {
+                         alert("Bad Submission");
+                    }
+               })();
+               }
      }
 
      const path : string = '/api/newUser?name=' + applicantName + '&';
-    /* useEffect(() => {
-          (async () => {
-            await fetch('/api/newUser?name=johndoe&number=12345');
-          })();
-        }, [])
-*/
 
      return (
           <form>
@@ -47,6 +50,7 @@ function NewApplicantForm() {
                     <label>
                          Phone Number: 
                          <input type="text" value={applicantNumber} onChange={changeNumber}required/>
+                         <div className="alert">{invalidAlert}</div>
                     </label>
                </div>
                <div>
